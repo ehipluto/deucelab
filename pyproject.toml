@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deucelab"
+dynamic = ["version"]
+description = "Real-time probabilistic analysis of table tennis set totals"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "customtkinter==5.2.2",
+]
+
+[project.urls]
+Repository = "https://github.com/ehipluto/deucelab"
+Issues = "https://github.com/ehipluto/deucelab/issues"
+
+[project.optional-dependencies]
+dev = ["coverage>=7.10,<8", "mypy>=1.18,<2", "ruff==0.15.4"]
+
+[project.scripts]
+deucelab = "deucelab.main:main"
+deucelab-backtest = "deucelab.backtest:main"
+deucelab-forecast-study = "deucelab.forecast_study:main"
+deucelab-strategy-study = "deucelab.strategy_study:main"
+deucelab-rally-validation = "deucelab.rally_validation:main"
+
+[tool.setuptools]
+packages = ["deucelab"]
+
+[tool.setuptools.dynamic]
+version = { attr = "deucelab.__version__" }
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"backtest.py" = ["F403"]
+"constants.py" = ["F403"]
+"forecast_study.py" = ["F403"]
+"gui.py" = ["F403"]
+"history.py" = ["F403"]
+"logic.py" = ["F403"]
+"main.py" = ["F403"]
+"rally_validation.py" = ["F403"]
+"strategy_study.py" = ["F403"]
+"visualization.py" = ["F403"]
+
+[tool.mypy]
+python_version = "3.12"
+files = [
+    "deucelab/rules.py",
+    "deucelab/markets.py",
+    "deucelab/ledger.py",
+    "deucelab/replay.py",
+    "deucelab/totals.py",
+]
+strict = true
+follow_imports = "silent"
+
+[tool.coverage.run]
+branch = true
+source = ["deucelab"]
+
+[tool.coverage.report]
+show_missing = true
