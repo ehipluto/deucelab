@@ -81,7 +81,6 @@ class ToolTip(ctk.CTkToplevel):
 
 
 class SettingsWindow(ctk.CTkToplevel):
-
     def __init__(
         self, master=None, logic_ref: BettingLogic | None = None, app_ref: Optional["App"] = None
     ):
@@ -166,7 +165,6 @@ class SettingsWindow(ctk.CTkToplevel):
 
 
 class App(ctk.CTk):
-
     def __init__(self, logic: BettingLogic):
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
@@ -197,11 +195,17 @@ class App(ctk.CTk):
         brand = ctk.CTkFrame(header, fg_color="transparent")
         brand.pack(side="left")
         ctk.CTkLabel(brand, text=APP_NAME, font=(FONT, 27, "bold")).pack(anchor="w")
-        ctk.CTkLabel(brand, text="TABLE TENNIS  /  LIVE WORKSPACE", text_color=MUTED,
-                     font=(FONT, 10, "bold")).pack(anchor="w")
         ctk.CTkLabel(
-            header, text=f"{logic.forecast_model.upper()} MODEL   ·   v{__version__}",
-            fg_color=SURFACE, corner_radius=8, text_color=MUTED, padx=12, pady=4,
+            brand, text="TABLE TENNIS  /  LIVE WORKSPACE", text_color=MUTED, font=(FONT, 10, "bold")
+        ).pack(anchor="w")
+        ctk.CTkLabel(
+            header,
+            text=f"{logic.forecast_model.upper()} MODEL   ·   v{__version__}",
+            fg_color=SURFACE,
+            corner_radius=8,
+            text_color=MUTED,
+            padx=12,
+            pady=4,
             font=(FONT, 11, "bold"),
         ).pack(side="right")
 
@@ -223,7 +227,9 @@ class App(ctk.CTk):
 
         self.status_bar = ctk.CTkFrame(self, fg_color=SURFACE)
         self.status_bar.pack(side="bottom", fill="x", padx=18, pady=(0, 10), before=main_frame)
-        self.status_label = ctk.CTkLabel(self.status_bar, text="Ready.", anchor="w", text_color=MUTED)
+        self.status_label = ctk.CTkLabel(
+            self.status_bar, text="Ready.", anchor="w", text_color=MUTED
+        )
         self.status_label.pack(side="left", padx=12)
         ctk.CTkLabel(self.status_bar, text="Ctrl+1  P1   ·   Ctrl+2  P2", text_color=MUTED).pack(
             side="right", padx=12
@@ -238,8 +244,12 @@ class App(ctk.CTk):
     def _build_menu(self):
         menu = Menu(self)
         match = Menu(menu, tearoff=False)
-        match.add_command(label="Award point to P1", accelerator="Ctrl+1", command=lambda: self.update_score(1))
-        match.add_command(label="Award point to P2", accelerator="Ctrl+2", command=lambda: self.update_score(2))
+        match.add_command(
+            label="Award point to P1", accelerator="Ctrl+1", command=lambda: self.update_score(1)
+        )
+        match.add_command(
+            label="Award point to P2", accelerator="Ctrl+2", command=lambda: self.update_score(2)
+        )
         match.add_command(label="Next set", command=self.start_next_set)
         match.add_separator()
         match.add_command(label="Export replay…", command=self.export_replay)
@@ -250,7 +260,9 @@ class App(ctk.CTk):
         view.add_command(label="Session history", command=self.toggle_bet_history)
         view.add_command(label="Forecast settings", command=self.open_settings)
         self.motion_enabled = BooleanVar(self, True)
-        view.add_checkbutton(label="Motion effects", variable=self.motion_enabled, command=self._set_motion)
+        view.add_checkbutton(
+            label="Motion effects", variable=self.motion_enabled, command=self._set_motion
+        )
         menu.add_cascade(label="View", menu=view)
         self.configure(menu=menu)
         self.bind("<Control-Key-1>", lambda _: self.update_score(1))
@@ -327,10 +339,16 @@ class App(ctk.CTk):
             score_frame, textvariable=self.p2_score_var, font=(FONT, 52, "bold"), text_color=P2
         )
         self.p2_score_label.grid(row=2, column=2, columnspan=2, pady=(0, 4))
-        ctk.CTkButton(score_frame, text="+  P1 point", width=95, height=36, fg_color=P1,
-                      text_color=BG, hover_color="#9ff4ee", command=lambda: self.update_score(1)).grid(
-            row=3, column=0, padx=5, pady=5, sticky="ew"
-        )
+        ctk.CTkButton(
+            score_frame,
+            text="+  P1 point",
+            width=95,
+            height=36,
+            fg_color=P1,
+            text_color=BG,
+            hover_color="#9ff4ee",
+            command=lambda: self.update_score(1),
+        ).grid(row=3, column=0, padx=5, pady=5, sticky="ew")
         ctk.CTkButton(
             score_frame,
             text="−1 P1",
@@ -338,10 +356,16 @@ class App(ctk.CTk):
             command=lambda: self.update_score(1, delta=-1),
             fg_color=BORDER,
         ).grid(row=3, column=1, padx=5, pady=5, sticky="ew")
-        ctk.CTkButton(score_frame, text="+  P2 point", width=95, height=36, fg_color=P2,
-                      text_color=BG, hover_color="#ffdab7", command=lambda: self.update_score(2)).grid(
-            row=3, column=2, padx=5, pady=5, sticky="ew"
-        )
+        ctk.CTkButton(
+            score_frame,
+            text="+  P2 point",
+            width=95,
+            height=36,
+            fg_color=P2,
+            text_color=BG,
+            hover_color="#ffdab7",
+            command=lambda: self.update_score(2),
+        ).grid(row=3, column=2, padx=5, pady=5, sticky="ew")
         ctk.CTkButton(
             score_frame,
             text="−1 P2",
@@ -392,7 +416,9 @@ class App(ctk.CTk):
             controls, text="≡  Session history", width=112, command=self.toggle_bet_history
         )
         self.history_button.grid(row=0, column=2, padx=2, sticky="ew")
-        self.settings_button = ctk.CTkButton(controls, text="⚙  Settings", width=96, command=self.open_settings)
+        self.settings_button = ctk.CTkButton(
+            controls, text="⚙  Settings", width=96, command=self.open_settings
+        )
         self.settings_button.grid(row=0, column=3, padx=(5, 0), sticky="ew")
 
         progress_frame = ctk.CTkFrame(panel, fg_color="transparent")
@@ -471,9 +497,9 @@ class App(ctk.CTk):
         history_panel.grid_propagate(False)
         history_panel.grid_columnconfigure(0, weight=1)
         history_panel.grid_rowconfigure(1, weight=1)
-        ctk.CTkLabel(
-            history_panel, text="Set log", font=(FONT, 15, "bold")
-        ).grid(row=0, column=0, pady=(10, 0))
+        ctk.CTkLabel(history_panel, text="Set log", font=(FONT, 15, "bold")).grid(
+            row=0, column=0, pady=(10, 0)
+        )
         self.history_scroll_frame = ctk.CTkScrollableFrame(history_panel, height=38)
         self.history_scroll_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
         self.history_scroll_frame.grid_columnconfigure(0, weight=1)
@@ -878,7 +904,8 @@ class App(ctk.CTk):
 
         req_pts = self.logic.required_points_for_elaboration
         self.elaboration_progress_label.configure(
-            text="Elaborated forecast ready" if self.logic.elaborated_bet_ready
+            text="Elaborated forecast ready"
+            if self.logic.elaborated_bet_ready
             else f"Elaborated forecast · {len(self.logic.point_history)}/{req_pts} rallies"
         )
         self.elaboration_progressbar.set(elaboration_prog / 100.0)
@@ -900,9 +927,7 @@ class App(ctk.CTk):
             self.dyn_sugg1_label.configure(
                 text=dynamic_sugg_ou.get("label", "Set Finished"), text_color="cyan"
             )
-            self.dyn_sugg1_details.configure(
-                text="The set is complete.", text_color=default_color
-            )
+            self.dyn_sugg1_details.configure(text="The set is complete.", text_color=default_color)
             if self.dyn_sugg1_tooltip:
                 self.dyn_sugg1_tooltip.set_text("")
         else:

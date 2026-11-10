@@ -106,9 +106,7 @@ class PredictionHistory:
                 entry.signal = Signal(entry.prediction)
                 entry.estimate = estimate.copy()
             return
-        entry = HistoryEntry(
-            prediction, estimate.copy(), Signal(prediction) if is_signal else None
-        )
+        entry = HistoryEntry(prediction, estimate.copy(), Signal(prediction) if is_signal else None)
         self._by_prediction[prediction] = entry
         self.entries.append(entry)
 

@@ -244,7 +244,9 @@ def historical_split(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Fit a market-aware forecast on one sample, then score fixed policies on another.")
+    parser = argparse.ArgumentParser(
+        description="Fit a market-aware forecast on one sample, then score fixed policies on another."
+    )
     parser.add_argument(
         "--sets",
         type=int,

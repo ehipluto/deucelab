@@ -62,7 +62,6 @@ FORECAST_MODELS = ("legacy", "direct")
 
 
 class BettingLogic:
-
     def __init__(self, forecast_model: str = "legacy"):
         if forecast_model not in FORECAST_MODELS:
             raise ValueError(f"Unknown forecast model: {forecast_model}")
@@ -146,9 +145,7 @@ class BettingLogic:
         self.history = PredictionHistory()
 
         self.point_probability_history = []
-        self.required_points_for_elaboration = (
-            c.ADAPTIVE_ELAB_BASE_POINTS
-        )
+        self.required_points_for_elaboration = c.ADAPTIVE_ELAB_BASE_POINTS
         if not self.live_odds_active:
             self.p1_neutral_point_win_prob_current = self.p1_neutral_point_win_prob_base
         self._calculate_history_adjusted_skill()
@@ -323,9 +320,7 @@ class BettingLogic:
         tw = 0
         apd = 0
         if nps > 0:
-            recency = self.config.get(
-                "history_weighting_recency", c.HISTORY_WEIGHTING_RECENCY
-            )
+            recency = self.config.get("history_weighting_recency", c.HISTORY_WEIGHTING_RECENCY)
             if recency > 0:
                 for i, (p1, p2) in enumerate(reversed(self.past_sets)):
                     w = max(0, 1.0 - (i / recency) * 0.5)
@@ -396,9 +391,7 @@ class BettingLogic:
             self.p2_serve_points_played += 1
             self.p2_serve_points_won += 1 if winner == 2 else 0
 
-        recent_winners_tuple = tuple(
-            p["winner"] for p in self.point_history[-c.MOMENTUM_WINDOW :]
-        )
+        recent_winners_tuple = tuple(p["winner"] for p in self.point_history[-c.MOMENTUM_WINDOW :])
         momentum_effect = self._calculate_exponential_momentum(recent_winners_tuple)
         self.current_momentum_score = momentum_effect
 
@@ -602,9 +595,7 @@ class BettingLogic:
         self.elaboration_progress = 0
         self.elaborated_bet_ready = False
         self.proposed_elaborated_bet = None
-        self.required_points_for_elaboration = (
-            c.ADAPTIVE_ELAB_BASE_POINTS
-        )
+        self.required_points_for_elaboration = c.ADAPTIVE_ELAB_BASE_POINTS
 
         self.clear_caches()
         logger.debug(f"--- Start New Set {len(self.past_sets) + 1} --- Init Srv: P{initial_srv}")
@@ -976,9 +967,7 @@ class BettingLogic:
             if self.config.get("momentum_impact_scale", c.MOMENTUM_IMPACT_SCALE) > 0
             else 0.0
         )
-        mom_score_for_viz = max(
-            -1.0, min(1.0, mom_score_for_viz)
-        )
+        mom_score_for_viz = max(-1.0, min(1.0, mom_score_for_viz))
 
         avg_hist_p1h = self._average_set_stat("p1_hold")
         avg_hist_p2h = self._average_set_stat("p2_hold")

@@ -80,14 +80,21 @@ class LiveChart(tk.Canvas):
         x = left + index * (right - left) / steps
         self.create_line(x, top, x, bottom, fill=MUTED, dash=(2, 3), tags="cursor")
         self.create_text(
-            right - 4, top + 8, text=f"After {index} rallies  /  " + "   ".join(values),
-            fill=TEXT, anchor="ne", font=(FONT, 9, "bold"), tags="cursor",
+            right - 4,
+            top + 8,
+            text=f"After {index} rallies  /  " + "   ".join(values),
+            fill=TEXT,
+            anchor="ne",
+            font=(FONT, 9, "bold"),
+            tags="cursor",
         )
 
 
 class LiveAnalysis(ctk.CTkFrame):
     def __init__(self, master):
-        super().__init__(master, fg_color=PANEL, corner_radius=16, border_width=1, border_color=BORDER)
+        super().__init__(
+            master, fg_color=PANEL, corner_radius=16, border_width=1, border_color=BORDER
+        )
         self.data: dict[str, Any] = {}
         self._draw_job = None
         self._animation = None
@@ -98,7 +105,9 @@ class LiveAnalysis(ctk.CTkFrame):
         header = ctk.CTkFrame(self, fg_color="transparent")
         header.grid(row=0, column=0, sticky="ew", padx=16, pady=(12, 0))
         ctk.CTkLabel(header, text="Rally analysis", font=(FONT, 20, "bold")).pack(side="left")
-        self.live_label = ctk.CTkLabel(header, text="●  LIVE", text_color=P1, font=(FONT, 11, "bold"))
+        self.live_label = ctk.CTkLabel(
+            header, text="●  LIVE", text_color=P1, font=(FONT, 11, "bold")
+        )
         self.live_label.pack(side="right")
 
         self.readout = ctk.CTkLabel(self, text="", font=(FONT, 18, "bold"), anchor="w")
@@ -108,9 +117,14 @@ class LiveAnalysis(ctk.CTkFrame):
         self.bar.set(0.5)
 
         self.selector = ctk.CTkSegmentedButton(
-            self, values=["Probability", "Score", "Details"], command=self._select,
-            fg_color=SURFACE, selected_color=BORDER, selected_hover_color=BORDER,
-            unselected_color=SURFACE, unselected_hover_color=BORDER,
+            self,
+            values=["Probability", "Score", "Details"],
+            command=self._select,
+            fg_color=SURFACE,
+            selected_color=BORDER,
+            selected_hover_color=BORDER,
+            unselected_color=SURFACE,
+            unselected_hover_color=BORDER,
         )
         self.selector.set("Probability")
         self.selector.grid(row=3, column=0, sticky="ew", padx=16)
@@ -137,7 +151,9 @@ class LiveAnalysis(ctk.CTkFrame):
         finished = self.data["finished"]
         self.live_label.configure(text="SET COMPLETE" if finished else "●  LIVE")
         self.readout.configure(
-            text="Final score recorded" if finished else f"P1  {probability:.1%}    /    P2  {1-probability:.1%}"
+            text="Final score recorded"
+            if finished
+            else f"P1  {probability:.1%}    /    P2  {1 - probability:.1%}"
         )
         if finished:
             self.bar.grid_remove()
@@ -155,7 +171,9 @@ class LiveAnalysis(ctk.CTkFrame):
             self.chart.grid_remove()
             self.details.grid()
             self.details.configure(text=self._format_details(data))
-            self.caption.configure(text="Neutral probabilities refer to a point without a serve advantage.")
+            self.caption.configure(
+                text="Neutral probabilities refer to a point without a serve advantage."
+            )
             return
         self.details.grid_remove()
         self.chart.grid()
@@ -170,7 +188,11 @@ class LiveAnalysis(ctk.CTkFrame):
                 history = [data["current_p1_point_win_prob"]]
             else:
                 history = [*history[:-1], data["current_p1_point_win_prob"]]
-            series = [([None, *history], P1, "P1")] if len(data["points_played_in_set"]) > 1 else [(history, P1, "P1")]
+            series = (
+                [([None, *history], P1, "P1")]
+                if len(data["points_played_in_set"]) > 1
+                else [(history, P1, "P1")]
+            )
             caption = "P1 next-point estimate  ·  Hover to inspect a rally"
         self.chart.set_series(series, view == "Probability")
         self.caption.configure(text=caption)
@@ -181,14 +203,16 @@ class LiveAnalysis(ctk.CTkFrame):
             value = data[key]
             return format(value, spec) if isinstance(value, (int, float)) else "—"
 
-        return "\n".join((
-            f"P1 neutral   {metric('p1_neutral_point_win_prob_current', '.1%')}",
-            f"Base   {metric('p1_neutral_point_win_prob_base', '.1%')}    /    Set-adjusted   {metric('p1_neutral_point_win_prob_history_adjusted', '.1%')}",
-            f"Serve points won   P1 {metric('p1_serve_hold_pct', '.1%')}    /    P2 {metric('p2_serve_hold_pct', '.1%')}",
-            f"Momentum   {metric('momentum_score', '+.2f')}    /    Game state   {metric('game_state_score', '+.2f')}",
-            f"Serve factor   {metric('serve_perf_score', '+.2f')}    /    Odds factor   {metric('scaled_perf_vs_odds', '+.2f')}",
-            f"Set difference   {metric('performance_delta_sets', '+.1f')}    /    Point difference   {metric('avg_point_diff', '+.1f')}",
-        ))
+        return "\n".join(
+            (
+                f"P1 neutral   {metric('p1_neutral_point_win_prob_current', '.1%')}",
+                f"Base   {metric('p1_neutral_point_win_prob_base', '.1%')}    /    Set-adjusted   {metric('p1_neutral_point_win_prob_history_adjusted', '.1%')}",
+                f"Serve points won   P1 {metric('p1_serve_hold_pct', '.1%')}    /    P2 {metric('p2_serve_hold_pct', '.1%')}",
+                f"Momentum   {metric('momentum_score', '+.2f')}    /    Game state   {metric('game_state_score', '+.2f')}",
+                f"Serve factor   {metric('serve_perf_score', '+.2f')}    /    Odds factor   {metric('scaled_perf_vs_odds', '+.2f')}",
+                f"Set difference   {metric('performance_delta_sets', '+.1f')}    /    Point difference   {metric('avg_point_diff', '+.1f')}",
+            )
+        )
 
     def _animate(self, target):
         if self._animation is not None:

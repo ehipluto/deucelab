@@ -50,7 +50,9 @@ def evaluate_rallies(path: Path, after_points: int, line: float) -> dict:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Score set-total probabilities on observed rallies without market prices.")
+    parser = argparse.ArgumentParser(
+        description="Score set-total probabilities on observed rallies without market prices."
+    )
     parser.add_argument("data", type=Path)
     parser.add_argument("--after-points", type=int, default=8)
     parser.add_argument("--line", type=float, default=18.5)

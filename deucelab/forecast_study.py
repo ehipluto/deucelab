@@ -208,7 +208,9 @@ def stress_sets(count: int, seed: int, after_points: int, scenario: str) -> Iter
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Compare point models on paired, out-of-sample set replays.")
+    parser = argparse.ArgumentParser(
+        description="Compare point models on paired, out-of-sample set replays."
+    )
     parser.add_argument("--sets", type=int, default=3000, help="sets per synthetic scenario")
     parser.add_argument("--seed", type=int, default=HOLDOUT_SEED)
     parser.add_argument("--after-points", type=int, default=8)

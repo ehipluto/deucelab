@@ -143,7 +143,9 @@ def synthetic_market_probability(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Reproducible point-by-point evaluation of DeuceLab.")
+    parser = argparse.ArgumentParser(
+        description="Reproducible point-by-point evaluation of DeuceLab."
+    )
     parser.add_argument(
         "--data", type=Path, help="JSONL of completed sets with historical snapshot odds"
     )
